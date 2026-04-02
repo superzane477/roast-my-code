@@ -42,6 +42,7 @@ export async function captureShareImage(element: HTMLElement): Promise<Blob | nu
       backgroundColor: '#0f0f1a',
       width: 1200,
       height: 630,
+      skipFonts: true,
     })
     return blob
   } catch {

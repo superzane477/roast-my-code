@@ -18,7 +18,7 @@ const ShareCard = forwardRef<HTMLDivElement, ShareCardProps>(({ result, code }, 
   return (
     <div
       ref={ref}
-      className="fixed left-[-9999px] top-[-9999px] w-[1200px] h-[630px] bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-8"
+      className="fixed inset-0 opacity-0 pointer-events-none w-[1200px] h-[630px] bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-8"
     >
       <div className="h-full flex flex-col">
         {/* Header */}
