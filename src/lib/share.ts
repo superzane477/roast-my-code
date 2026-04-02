@@ -1,5 +1,5 @@
 import LZString from 'lz-string'
-import html2canvas from 'html2canvas'
+import { toBlob } from 'html-to-image'
 import type { RoastResult } from '../types'
 
 interface SharePayload {
@@ -35,46 +35,17 @@ export function getShareUrl(result: RoastResult, code: string): string {
 }
 
 export async function captureShareImage(element: HTMLElement): Promise<Blob | null> {
-  // Temporarily move element on-screen so html2canvas can capture it
-  const prev = {
-    position: element.style.position,
-    left: element.style.left,
-    top: element.style.top,
-    zIndex: element.style.zIndex,
-  }
-  element.style.position = 'fixed'
-  element.style.left = '0'
-  element.style.top = '0'
-  element.style.zIndex = '-1'
-
   try {
-    const canvas = await html2canvas(element, {
+    const blob = await toBlob(element, {
+      cacheBust: true,
+      pixelRatio: 2,
       backgroundColor: '#0f0f1a',
-      scale: 2,
-      useCORS: true,
-      logging: false,
       width: 1200,
       height: 630,
-      onclone: (clonedDoc: Document) => {
-        clonedDoc.querySelectorAll('link[rel="stylesheet"]').forEach((link) => {
-          const href = link.getAttribute('href') || ''
-          if (href.includes('cdn.jsdelivr.net') || href.includes('monaco')) {
-            link.remove()
-          }
-        })
-      },
     })
-    return new Promise((resolve) => {
-      canvas.toBlob((blob) => resolve(blob), 'image/png')
-    })
+    return blob
   } catch {
     return null
-  } finally {
-    // Restore original positioning
-    element.style.position = prev.position
-    element.style.left = prev.left
-    element.style.top = prev.top
-    element.style.zIndex = prev.zIndex
   }
 }
 
@@ -102,7 +73,7 @@ export function buildRedditUrl(title: string, url: string): string {
     title: title,
     url: url,
   })
-  return `https://www.reddit.com/submit?${params.toString()}`
+  return `https://www.reddit.com/r/verdent/submit?${params.toString()}`
 }
 
 export async function copyToClipboard(text: string): Promise<boolean> {
