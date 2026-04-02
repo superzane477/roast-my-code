@@ -1,0 +1,89 @@
+@import "tailwindcss";
+
+/* Ensure root containers fill viewport correctly */
+html {
+  height: 100%;
+}
+
+body {
+  background: linear-gradient(135deg, #0f0f1a 0%, #1a0a0a 100%);
+  color: #e2e8f0;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  min-height: 100%;
+  overflow-x: hidden;
+}
+
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.glow-card {
+  background: rgba(30, 20, 20, 0.8);
+  border: 1px solid rgba(255, 100, 50, 0.15);
+  border-radius: 12px;
+  backdrop-filter: blur(8px);
+}
+
+/* Severity colors */
+.severity-fatal { color: #f87171; }
+.severity-error { color: #fb923c; }
+.severity-warning { color: #fbbf24; }
+.severity-info { color: #60a5fa; }
+
+/* Score colors */
+.score-low { color: #f87171; }
+.score-mid { color: #fbbf24; }
+.score-high { color: #4ade80; }
+
+/* Persona accent colors */
+.persona-strict-lead { --accent: #3b82f6; }
+.persona-sarcastic-coworker { --accent: #a855f7; }
+.persona-gentle-mentor { --accent: #22c55e; }
+.persona-linus { --accent: #ef4444; }
+
+/* Code block styling */
+.code-line {
+  display: flex;
+  align-items: flex-start;
+  padding: 2px 0;
+}
+
+.code-line:hover {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.line-number {
+  min-width: 3rem;
+  padding-right: 1rem;
+  text-align: right;
+  color: #64748b;
+  user-select: none;
+  font-family: 'Fira Code', 'Monaco', monospace;
+  font-size: 0.875rem;
+}
+
+.line-content {
+  flex: 1;
+  font-family: 'Fira Code', 'Monaco', monospace;
+  font-size: 0.875rem;
+  white-space: pre;
+}
+
+/* Animation for score gauge */
+@keyframes gauge-fill {
+  from {
+    stroke-dashoffset: 283;
+  }
+}
+
+/* Loading animation */
+@keyframes pulse-fire {
+  0%, 100% { opacity: 0.6; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.05); }
+}
+
+.animate-pulse-fire {
+  animation: pulse-fire 1.5s ease-in-out infinite;
+}
