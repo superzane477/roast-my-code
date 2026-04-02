@@ -1,5 +1,5 @@
 import LZString from 'lz-string'
-import { toBlob } from 'html-to-image'
+import html2canvas from 'html2canvas-pro'
 import type { RoastResult } from '../types'
 
 interface SharePayload {
@@ -35,18 +35,53 @@ export function getShareUrl(result: RoastResult, code: string): string {
 }
 
 export async function captureShareImage(element: HTMLElement): Promise<Blob | null> {
+  // 临时移动元素到可见区域
+  const prev = {
+    position: element.style.position,
+    left: element.style.left,
+    top: element.style.top,
+    zIndex: element.style.zIndex,
+    opacity: element.style.opacity,
+  }
+
+  element.style.position = 'fixed'
+  element.style.left = '0'
+  element.style.top = '0'
+  element.style.zIndex = '-9999'
+  element.style.opacity = '1'
+
   try {
-    const blob = await toBlob(element, {
-      cacheBust: true,
-      pixelRatio: 2,
+    const canvas = await html2canvas(element, {
       backgroundColor: '#0f0f1a',
+      scale: 2,
+      useCORS: true,
+      logging: false,
       width: 1200,
       height: 630,
-      skipFonts: true,
+      onclone: (clonedDoc: Document) => {
+        // 移除 Monaco Editor 的 CDN CSS
+        clonedDoc.querySelectorAll('link[rel="stylesheet"]').forEach((link) => {
+          const href = link.getAttribute('href') || ''
+          if (href.includes('cdn.jsdelivr.net') || href.includes('monaco')) {
+            link.remove()
+          }
+        })
+      },
     })
-    return blob
-  } catch {
+
+    return new Promise((resolve) => {
+      canvas.toBlob((blob) => resolve(blob), 'image/png')
+    })
+  } catch (err) {
+    console.error('captureShareImage failed:', err)
     return null
+  } finally {
+    // 恢复原始样式
+    element.style.position = prev.position
+    element.style.left = prev.left
+    element.style.top = prev.top
+    element.style.zIndex = prev.zIndex
+    element.style.opacity = prev.opacity
   }
 }
 
