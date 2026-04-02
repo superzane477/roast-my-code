@@ -55,6 +55,14 @@ export async function captureShareImage(element: HTMLElement): Promise<Blob | nu
       logging: false,
       width: 1200,
       height: 630,
+      onclone: (clonedDoc: Document) => {
+        clonedDoc.querySelectorAll('link[rel="stylesheet"]').forEach((link) => {
+          const href = link.getAttribute('href') || ''
+          if (href.includes('cdn.jsdelivr.net') || href.includes('monaco')) {
+            link.remove()
+          }
+        })
+      },
     })
     return new Promise((resolve) => {
       canvas.toBlob((blob) => resolve(blob), 'image/png')

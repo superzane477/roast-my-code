@@ -55,7 +55,7 @@ export default function RoastPanel({ result, persona, code, language, onReset }:
       <RoastSummary summary={result.overallRoast} persona={persona} />
 
       {/* Share panel */}
-      <SharePanel result={result} />
+      <SharePanel result={result} code={code} />
     </motion.div>
   )
 }

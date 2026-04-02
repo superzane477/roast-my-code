@@ -46,7 +46,7 @@ export default function ScoreGauge({ label, value }: ScoreGaugeProps) {
   return (
     <div className="flex items-center gap-4">
       <div className="relative w-20 h-20">
-        <svg className="transform -rotate-90 w-20 h-20">
+        <svg className="transform -rotate-90 w-20 h-20" viewBox="-3 -3 86 86">
           {/* Background circle */}
           <circle
             cx="40"
@@ -68,6 +68,7 @@ export default function ScoreGauge({ label, value }: ScoreGaugeProps) {
             strokeWidth="6"
             fill="none"
             strokeLinecap="round"
+            strokeDasharray={circumference}
             style={{
               transition: 'stroke-dashoffset 0.3s ease-out',
             }}
